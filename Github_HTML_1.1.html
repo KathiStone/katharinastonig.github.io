@@ -1,0 +1,1262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Katharina Stonig — Molecular Ecologist</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Mono:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      /* Slightly warmer, higher-contrast palette for readability */
+      --ink:       #12180f;       /* darker, near-black with green undertone */
+      --body-text: #2c3329;       /* readable dark green-grey for body copy */
+      --forest:    #2d4a2d;
+      --moss:      #3d5c38;       /* slightly darker for better contrast on paper */
+      --fern:      #5a7d4e;
+      --sage:      #8aaa7d;
+      --mist:      #cdd8c8;
+      --paper:     #f2f4ee;       /* very slightly cooler, crisper white */
+      --white:     #fafaf8;
+      --accent:    #3d6b35;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--paper);
+      color: var(--body-text);
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      /* Slightly larger base size for readability */
+      font-size: 19px;
+      line-height: 1.75;
+      overflow-x: hidden;
+      /* Normal cursor — no custom cursor */
+    }
+
+    /* ── NOISE OVERLAY ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 1000;
+      opacity: 0.5;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 500;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.4rem 3rem;
+      background: rgba(242,244,238,0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid transparent;
+      transition: border-color 0.3s;
+    }
+    nav.scrolled { border-bottom-color: var(--mist); }
+    .nav-logo {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--forest);
+      text-decoration: none;
+    }
+    .nav-links {
+      display: flex;
+      gap: 2.5rem;
+      list-style: none;
+      align-items: center;
+    }
+    .nav-links a {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--body-text);
+      text-decoration: none;
+      opacity: 0.5;
+      transition: opacity 0.3s;
+      position: relative;
+      padding-bottom: 2px;
+    }
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -2px; left: 0;
+      width: 0; height: 1px;
+      background: var(--forest);
+      transition: width 0.3s;
+    }
+    .nav-links a:hover, .nav-links a.active { opacity: 1; }
+    .nav-links a.active::after { width: 100%; }
+
+    /* ── OPEN TO WORK BADGE ── */
+    .nav-badge {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.58rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 0.35rem 0.85rem;
+      background: var(--forest);
+      color: var(--white);
+      border-radius: 100px;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .nav-badge::before {
+      content: '';
+      width: 6px; height: 6px;
+      background: #7dcc6a;
+      border-radius: 50%;
+      animation: pulse 2s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(0.8); }
+    }
+
+    /* ── HERO ── */
+    #hero {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-left {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 7rem 3rem 12rem 5rem;
+      position: relative;
+      z-index: 2;
+    }
+    .hero-eyebrow {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--moss);
+      margin-bottom: 2rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    .hero-eyebrow::before {
+      content: '';
+      display: inline-block;
+      width: 40px; height: 1px;
+      background: var(--moss);
+    }
+    h1.hero-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(4rem, 8vw, 8rem);
+      font-weight: 300;
+      line-height: 0.95;
+      letter-spacing: -0.02em;
+      color: var(--ink);
+    }
+    h1.hero-name em {
+      font-style: italic;
+      color: var(--forest);
+    }
+    .hero-descriptor {
+      margin-top: 2.5rem;
+      font-size: 1.2rem;
+      font-weight: 400;           /* bumped from 300 for readability */
+      color: var(--moss);
+      max-width: 380px;
+      line-height: 1.8;
+    }
+    .hero-tags {
+      margin-top: 3rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+    }
+    .tag {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      padding: 0.4rem 0.9rem;
+      border: 1px solid var(--fern);
+      color: var(--fern);
+      border-radius: 100px;
+    }
+
+    .hero-right {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+    .hero-illustration {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 60% 40%, #3d6b3522 0%, transparent 70%),
+        radial-gradient(ellipse 40% 80% at 80% 70%, #6b8f5e18 0%, transparent 60%);
+    }
+    .hero-shape {
+      width: 520px;
+      height: 580px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .hero-contact {
+      position: absolute;
+      bottom: 3rem;
+      right: 3rem;
+      text-align: right;
+      z-index: 3;
+    }
+    .hero-contact a {
+      display: block;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.62rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--moss);
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+    .hero-contact a:hover { color: var(--forest); }
+
+    .scroll-hint {
+      position: absolute;
+      bottom: 3rem;
+      left: 5rem;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--sage);
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      z-index: 3;
+    }
+    .scroll-hint::after {
+      content: '';
+      display: block;
+      width: 1px;
+      height: 50px;
+      background: var(--sage);
+      animation: scrollLine 1.8s ease-in-out infinite;
+    }
+    @keyframes scrollLine {
+      0%, 100% { opacity: 0.3; transform: scaleY(1); }
+      50% { opacity: 1; transform: scaleY(1.3); }
+    }
+
+    /* ── ABOUT ── */
+    #about {
+      padding: 10rem 5rem;
+      display: grid;
+      grid-template-columns: 2fr 3fr;
+      gap: 6rem;
+      align-items: start;
+      position: relative;
+    }
+    #about::before {
+      content: '01';
+      position: absolute;
+      top: 5rem; right: 5rem;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 10rem;
+      color: var(--mist);
+      font-weight: 300;
+      line-height: 1;
+      pointer-events: none;
+    }
+    .section-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.62rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--moss);
+      margin-bottom: 2rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    .section-label::before {
+      content: '';
+      width: 30px; height: 1px;
+      background: var(--moss);
+    }
+    .about-left h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2.5rem, 4vw, 3.8rem);
+      font-weight: 300;
+      line-height: 1.1;
+      color: var(--forest);
+    }
+    .about-left h2 em { font-style: italic; }
+    .about-right p {
+      font-size: 1.15rem;
+      font-weight: 400;           /* 400 instead of 300 — much more readable */
+      line-height: 1.9;
+      color: var(--body-text);
+      margin-bottom: 1.5rem;
+    }
+    .about-right p strong {
+      font-weight: 600;
+      color: var(--forest);
+    }
+    .about-stats {
+      margin-top: 3rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 2rem;
+      padding-top: 2.5rem;
+      border-top: 1px solid var(--mist);
+    }
+    .stat-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 3rem;
+      font-weight: 300;
+      color: var(--forest);
+      line-height: 1;
+    }
+    .stat-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--sage);
+      margin-top: 0.4rem;
+    }
+
+    /* ── EXPERIENCE ── */
+    #experience {
+      padding: 8rem 0;
+      background: var(--forest);
+      position: relative;
+      overflow: hidden;
+    }
+    .exp-header {
+      padding: 0 5rem 4rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+    }
+    .exp-header h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2.5rem, 4vw, 3.5rem);
+      font-weight: 300;
+      color: var(--white);
+      line-height: 1.1;
+    }
+    .exp-header h2 em { font-style: italic; color: var(--sage); }
+    .exp-nav { display: flex; gap: 1rem; }
+    .exp-btn {
+      width: 48px; height: 48px;
+      border: 1px solid rgba(255,255,255,0.3);
+      background: transparent;
+      color: var(--white);
+      font-size: 1.2rem;
+      cursor: pointer;
+      transition: background 0.3s, border-color 0.3s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .exp-btn:hover { background: var(--moss); border-color: var(--moss); }
+    .exp-track-wrap { overflow: hidden; padding: 0 5rem; }
+    .exp-track {
+      display: flex;
+      gap: 2rem;
+      transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+    .exp-card {
+      flex: 0 0 380px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.1);
+      padding: 2.5rem;
+      position: relative;
+      backdrop-filter: blur(4px);
+    }
+    .exp-card-year {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--sage);
+      margin-bottom: 1.5rem;
+    }
+    .exp-card-role {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.6rem;
+      font-weight: 400;
+      color: var(--white);
+      line-height: 1.2;
+      margin-bottom: 0.5rem;
+    }
+    .exp-card-org {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.62rem;
+      letter-spacing: 0.12em;
+      color: var(--fern);
+      margin-bottom: 1.5rem;
+      text-transform: uppercase;
+    }
+    .exp-card-desc {
+      font-size: 1rem;
+      font-weight: 400;           /* bumped for readability on dark background */
+      color: rgba(255,255,255,0.8); /* brighter than before */
+      line-height: 1.8;
+    }
+    .exp-card-skills {
+      margin-top: 2rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+    }
+    .exp-skill {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.55rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 0.3rem 0.7rem;
+      border: 1px solid rgba(163,184,153,0.4);
+      color: rgba(163,184,153,0.9);
+    }
+    .exp-card-num {
+      position: absolute;
+      top: 1.5rem; right: 2rem;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 4rem;
+      font-weight: 300;
+      color: rgba(255,255,255,0.05);
+      line-height: 1;
+    }
+
+    /* ── RESEARCH ── */
+    #research {
+      padding: 10rem 5rem;
+      position: relative;
+    }
+    #research::before {
+      content: '02';
+      position: absolute;
+      top: 5rem; left: 3rem;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 10rem;
+      color: var(--mist);
+      font-weight: 300;
+      line-height: 1;
+      pointer-events: none;
+    }
+    .research-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      margin-top: 5rem;
+    }
+
+    /* Publication cards — only clickable ones get hover */
+    .pub-card {
+      padding: 3rem;
+      border: 1px solid var(--mist);
+      position: relative;
+      overflow: hidden;
+      display: block;
+      text-decoration: none;
+      color: inherit;
+    }
+    /* Animated left border only on actual links */
+    a.pub-card::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 3px;
+      background: var(--forest);
+      transform: scaleY(0);
+      transform-origin: bottom;
+      transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+    a.pub-card:hover { border-color: var(--fern); transform: translateY(-4px); transition: border-color 0.4s, transform 0.4s; }
+    a.pub-card:hover::before { transform: scaleY(1); }
+
+    /* "Read paper →" link label */
+    .pub-readmore {
+      margin-top: 1.5rem;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--forest);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      opacity: 0;
+      transform: translateX(-6px);
+      transition: opacity 0.3s, transform 0.3s;
+    }
+    a.pub-card:hover .pub-readmore { opacity: 1; transform: translateX(0); }
+
+    .pub-year {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.2em;
+      color: var(--moss);
+      text-transform: uppercase;
+      margin-bottom: 1.2rem;
+    }
+    .pub-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.4rem;
+      font-weight: 400;
+      line-height: 1.35;
+      color: var(--ink);
+      margin-bottom: 1rem;
+      font-style: italic;
+    }
+    .pub-journal {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--fern);
+      margin-bottom: 1.2rem;
+    }
+    .pub-authors {
+      font-size: 0.95rem;
+      font-weight: 400;
+      color: var(--body-text);
+      line-height: 1.7;
+      opacity: 0.7;
+    }
+    .pub-badge {
+      position: absolute;
+      top: 2rem; right: 2rem;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.55rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 0.3rem 0.7rem;
+      background: var(--forest);
+      color: var(--paper);
+    }
+
+    .thesis-card {
+      grid-column: 1 / -1;
+      background: var(--ink);
+      color: var(--white);
+      padding: 4rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+    }
+    .thesis-card .pub-year { color: var(--sage); }
+    .thesis-card .pub-title { color: var(--white); font-size: 1.9rem; }
+    .thesis-card .pub-journal { color: var(--fern); }
+    .thesis-card .pub-desc {
+      font-size: 1rem;
+      font-weight: 400;
+      color: rgba(255,255,255,0.75);
+      line-height: 1.85;
+    }
+
+    /* ── SKILLS ── */
+    #skills {
+      padding: 10rem 5rem;
+      background: var(--mist);
+      position: relative;
+    }
+    .skills-layout {
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      gap: 6rem;
+      margin-top: 5rem;
+    }
+    .skills-intro {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.5rem;
+      font-weight: 400;
+      line-height: 1.6;
+      color: var(--forest);
+      font-style: italic;
+    }
+    .skills-groups {
+      display: flex;
+      flex-direction: column;
+      gap: 3rem;
+    }
+    .skill-group-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--moss);
+      margin-bottom: 1.2rem;
+      padding-bottom: 0.8rem;
+      border-bottom: 1px solid var(--sage);
+    }
+    .skill-pills { display: flex; flex-wrap: wrap; gap: 0.6rem; }
+
+    /* Skills are purely decorative — no hover interaction */
+    .skill-pill {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 0.55rem 1.1rem;
+      background: var(--white);
+      color: var(--forest);
+      border: 1px solid rgba(45,74,45,0.2);
+    }
+    .skill-pill.highlight { background: var(--forest); color: var(--white); }
+
+    /* ── LANGUAGES ── */
+    .languages-row {
+      margin-top: 5rem;
+      display: flex;
+      gap: 0.5rem;
+      align-items: stretch;
+    }
+    /* Language blocks — no hover, just static display */
+    .lang-block {
+      flex: 1;
+      padding: 2.5rem 2rem;
+      background: var(--white);
+      border: 1px solid var(--mist);
+      text-align: center;
+    }
+    .lang-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.6rem;
+      font-weight: 400;
+      color: var(--ink);
+    }
+    .lang-level {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.55rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--sage);
+      margin-top: 0.4rem;
+    }
+
+    /* ── INTERESTS ── */
+    #interests {
+      padding: 10rem 5rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+    }
+    .interests-text h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2.5rem, 4vw, 3.8rem);
+      font-weight: 300;
+      line-height: 1.1;
+      color: var(--ink);
+    }
+    .interests-text h2 em { font-style: italic; color: var(--forest); }
+    .interests-text p {
+      margin-top: 2rem;
+      font-size: 1.1rem;
+      font-weight: 400;
+      color: var(--body-text);
+      line-height: 1.9;
+    }
+    .interest-items {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1px;
+      background: var(--mist);
+    }
+    /* Interest items — no hover interaction */
+    .interest-item {
+      background: var(--paper);
+      padding: 2.5rem 2rem;
+    }
+    .interest-icon { font-size: 1.8rem; margin-bottom: 1rem; }
+    .interest-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.2rem;
+      font-weight: 400;
+      color: var(--forest);
+      margin-bottom: 0.4rem;
+    }
+    .interest-desc {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.58rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--body-text);
+      opacity: 0.6;
+      line-height: 1.8;
+    }
+
+    /* ── CONTACT ── */
+    #contact {
+      background: var(--ink);
+      padding: 8rem 5rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6rem;
+      align-items: end;
+    }
+    #contact .section-label { color: var(--sage); }
+    #contact .section-label::before { background: var(--sage); }
+    .contact-headline {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(3rem, 5vw, 5rem);
+      font-weight: 300;
+      color: var(--white);
+      line-height: 1;
+      margin-top: 1.5rem;
+    }
+    .contact-headline em { font-style: italic; color: var(--sage); }
+    .contact-links { display: flex; flex-direction: column; gap: 2rem; }
+    .contact-link {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      text-decoration: none;
+      color: var(--white);
+      padding-bottom: 1.5rem;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      transition: border-color 0.3s;
+    }
+    .contact-link:hover { border-color: var(--fern); }
+    .contact-link-icon {
+      width: 44px; height: 44px;
+      border: 1px solid rgba(255,255,255,0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      flex-shrink: 0;
+    }
+    .contact-link-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--sage);
+      margin-bottom: 0.3rem;
+    }
+    .contact-link-value {
+      font-size: 1rem;
+      font-weight: 400;
+      color: var(--white);
+    }
+
+    /* ── CV DOWNLOAD BUTTON ── */
+    .cv-download {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.8rem;
+      margin-top: 2.5rem;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      padding: 1rem 2rem;
+      border: 1px solid rgba(255,255,255,0.3);
+      color: var(--white);
+      text-decoration: none;
+      transition: background 0.3s, border-color 0.3s;
+    }
+    .cv-download:hover { background: var(--moss); border-color: var(--moss); }
+    .cv-download-icon { font-size: 1rem; }
+
+    footer {
+      background: var(--ink);
+      border-top: 1px solid rgba(255,255,255,0.07);
+      padding: 2rem 5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    footer p {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.58rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.3);
+    }
+
+    /* ── ANIMATIONS ── */
+    .fade-up {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+    .fade-up.visible { opacity: 1; transform: translateY(0); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      nav { padding: 1.2rem 1.5rem; }
+      .nav-links { gap: 1.2rem; }
+      .nav-badge { display: none; }
+      #hero { grid-template-columns: 1fr; }
+      .hero-right { display: none; }
+      .hero-left { padding: 8rem 2rem 6rem; }
+      #about, #interests { grid-template-columns: 1fr; gap: 3rem; padding: 6rem 2rem; }
+      #about::before, #research::before { display: none; }
+      .research-grid { grid-template-columns: 1fr; }
+      .thesis-card { grid-template-columns: 1fr; }
+      #skills { padding: 6rem 2rem; }
+      .skills-layout { grid-template-columns: 1fr; gap: 3rem; }
+      #contact { grid-template-columns: 1fr; padding: 6rem 2rem; }
+      .exp-header, .exp-track-wrap { padding-left: 2rem; padding-right: 2rem; }
+      .exp-card { flex: 0 0 300px; }
+      .languages-row { flex-wrap: wrap; }
+      #research { padding: 6rem 2rem; }
+      footer { flex-direction: column; gap: 1rem; padding: 2rem; text-align: center; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- NAV -->
+  <nav id="mainNav">
+    <a class="nav-logo" href="#">K. Stonig</a>
+    <ul class="nav-links">
+      <li><a href="#about" data-section="about">About</a></li>
+      <li><a href="#experience" data-section="experience">Experience</a></li>
+      <li><a href="#research" data-section="research">Research</a></li>
+      <li><a href="#skills" data-section="skills">Skills</a></li>
+      <li><a href="#contact" data-section="contact">Contact</a></li>
+      <li><span class="nav-badge">Open to opportunities</span></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <section id="hero">
+    <div class="hero-left">
+      <p class="hero-eyebrow">Molecular Ecologist · MSc</p>
+      <h1 class="hero-name">
+        Katha&shy;<em>rina</em><br>Stonig
+      </h1>
+      <p class="hero-descriptor">
+        Biodiversity researcher at the intersection of genetics, ecology, and conservation — from alpine newt populations to microbial worlds.
+      </p>
+      <div class="hero-tags">
+        <span class="tag">Population Genetics</span>
+        <span class="tag">DNA Monitoring</span>
+        <span class="tag">Field Research</span>
+        <span class="tag">R / Statistics</span>
+        <span class="tag">Conservation</span>
+      </div>
+      <div class="scroll-hint">Scroll</div>
+    </div>
+    <div class="hero-right">
+      <div class="hero-illustration"></div>
+      <svg class="hero-shape" viewBox="0 0 520 580" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <ellipse cx="280" cy="300" rx="200" ry="240" fill="#2d4a2d" opacity="0.08" transform="rotate(-15 280 300)"/>
+        <path d="M260 540 C250 480 240 420 255 360 C265 300 255 240 265 180 C270 150 268 120 265 90" stroke="#4a6741" stroke-width="2.5" fill="none" opacity="0.9"/>
+        <path d="M255 340 C210 320 165 290 140 250 C125 225 130 195 155 188 C185 180 225 205 245 240 C258 265 260 305 255 340Z" fill="#3d6b35" opacity="0.55"/>
+        <path d="M255 340 C238 305 220 272 200 250" stroke="#2d4a2d" stroke-width="1" opacity="0.5"/>
+        <path d="M265 280 C305 255 350 235 385 205 C405 188 410 162 390 152 C368 142 330 160 305 190 C282 215 270 250 265 280Z" fill="#4a6741" opacity="0.6"/>
+        <path d="M265 280 C282 248 300 220 325 198" stroke="#2d4a2d" stroke-width="1" opacity="0.4"/>
+        <path d="M258 220 C225 208 195 185 178 155 C166 133 174 112 196 110 C218 108 245 128 255 158 C262 178 262 202 258 220Z" fill="#6b8f5e" opacity="0.5"/>
+        <path d="M264 140 C244 120 225 95 228 68 C230 50 248 44 264 52 C278 60 285 82 282 108 C279 122 272 134 264 140Z" fill="#3d6b35" opacity="0.65"/>
+        <path d="M266 130 C280 108 298 88 302 66 C306 48 292 38 277 44 C263 50 256 72 259 98 C261 112 264 124 266 130Z" fill="#4a6741" opacity="0.5"/>
+        <path d="M260 400 C235 388 212 370 200 345 C192 328 198 312 215 310 C232 308 252 325 258 348 C262 366 262 386 260 400Z" fill="#6b8f5e" opacity="0.45"/>
+        <path d="M262 390 C282 374 300 352 306 328 C312 308 300 296 285 300 C270 304 260 322 260 348 C260 366 261 382 262 390Z" fill="#5a7f52" opacity="0.4"/>
+        <path d="M260 540 C245 530 220 525 200 535 C185 542 185 555 200 558 C220 562 248 552 260 540Z" fill="#2d4a2d" opacity="0.3"/>
+        <path d="M260 540 C272 530 295 525 315 533 C330 540 330 554 315 557 C295 561 270 551 260 540Z" fill="#2d4a2d" opacity="0.25"/>
+        <circle cx="185" cy="250" r="3" fill="#a3b899" opacity="0.7"/>
+        <circle cx="168" cy="265" r="2" fill="#a3b899" opacity="0.5"/>
+        <circle cx="395" cy="198" r="3.5" fill="#a3b899" opacity="0.6"/>
+        <circle cx="412" cy="182" r="2" fill="#a3b899" opacity="0.4"/>
+        <circle cx="310" cy="68" r="2.5" fill="#6b8f5e" opacity="0.7"/>
+        <path d="M255 340 C242 325 228 308 215 290" stroke="#2d4a2d" stroke-width="0.8" opacity="0.3"/>
+        <path d="M255 340 C248 318 240 298 228 278" stroke="#2d4a2d" stroke-width="0.6" opacity="0.25"/>
+      </svg>
+    </div>
+    <div class="hero-contact">
+      <a href="mailto:katharina.stonig@gmail.com">katharina.stonig@gmail.com</a>
+      <a href="https://www.linkedin.com/in/katharina-stonig" target="_blank">linkedin.com/in/katharina-stonig</a>
+      <a href="tel:+13393681879">+1 (339) 368-1879</a>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="about-left fade-up">
+      <p class="section-label">About</p>
+      <h2>Science<br>rooted in<br><em>the wild</em></h2>
+    </div>
+    <div class="about-right fade-up">
+      <p>I am a <strong>Molecular Ecologist</strong> with an MSc from the University of Innsbruck, specialising in biodiversity research, DNA-based monitoring, and population genetics. My work spans alpine wetlands, insect rearing facilities, and conservation reserves — bridging laboratory precision with field intuition.</p>
+      <p>My master's research uncovered the population structure of <em>Lissotriton vulgaris</em> (Smooth Newts) across North Tyrol, using non-invasive sampling and microsatellite analysis to inform conservation priorities. That same curiosity about life's molecular architecture carried into published work on the Black Soldier Fly microbiome.</p>
+      <p>Currently based between Europe and the USA, I bring an international perspective and a deep commitment to environmental stewardship — in the lab, in the field, and in the classroom.</p>
+      <div class="about-stats">
+        <div>
+          <div class="stat-num">2</div>
+          <div class="stat-label">Publications</div>
+        </div>
+        <div>
+          <div class="stat-num">6+</div>
+          <div class="stat-label">Years Research</div>
+        </div>
+        <div>
+          <div class="stat-num">4</div>
+          <div class="stat-label">Languages</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- EXPERIENCE -->
+  <section id="experience">
+    <div class="exp-header fade-up">
+      <h2>Field<br><em>Experience</em></h2>
+      <div class="exp-nav">
+        <button class="exp-btn" id="expPrev" aria-label="Previous">←</button>
+        <button class="exp-btn" id="expNext" aria-label="Next">→</button>
+      </div>
+    </div>
+    <div class="exp-track-wrap">
+      <div class="exp-track" id="expTrack">
+        <div class="exp-card">
+          <span class="exp-card-num">01</span>
+          <div class="exp-card-year">Mar 2025 – Sept 2025</div>
+          <div class="exp-card-role">After-School Teacher</div>
+          <div class="exp-card-org">German International School Boston · USA</div>
+          <p class="exp-card-desc">Provided bilingual childcare (ages 3–5) with a focus on environmental education, fostering curiosity about the natural world through structured play and outdoor exploration.</p>
+          <div class="exp-card-skills">
+            <span class="exp-skill">Env. Education</span>
+            <span class="exp-skill">Intercultural Comm.</span>
+            <span class="exp-skill">Adaptability</span>
+          </div>
+        </div>
+        <div class="exp-card">
+          <span class="exp-card-num">02</span>
+          <div class="exp-card-year">Jan 2025 – Mar 2025</div>
+          <div class="exp-card-role">Volunteer Researcher</div>
+          <div class="exp-card-org">The Trustees of Reservations · Massachusetts</div>
+          <p class="exp-card-desc">Applied data analysis and project planning expertise within the Nature and Resiliency team, evaluating environmental datasets to support long-term ecological restoration strategies.</p>
+          <div class="exp-card-skills">
+            <span class="exp-skill">Data Analysis</span>
+            <span class="exp-skill">Strategic Planning</span>
+            <span class="exp-skill">Conservation</span>
+          </div>
+        </div>
+        <div class="exp-card">
+          <span class="exp-card-num">03</span>
+          <div class="exp-card-year">Mar 2023 – Nov 2024</div>
+          <div class="exp-card-role">Technical Assistant</div>
+          <div class="exp-card-org">University of Innsbruck · Institute of Molecular Ecology</div>
+          <p class="exp-card-desc">Reared and maintained diverse Drosophila strains including Wolbachia-infected lines. Optimised laboratory workflows, quality and hygiene protocols, and provided experimental support.</p>
+          <div class="exp-card-skills">
+            <span class="exp-skill">Lab Management</span>
+            <span class="exp-skill">Rearing Protocols</span>
+            <span class="exp-skill">Molecular Ecology</span>
+          </div>
+        </div>
+        <div class="exp-card">
+          <span class="exp-card-num">04</span>
+          <div class="exp-card-year">Apr 2022 – Sept 2023</div>
+          <div class="exp-card-role">Student Research Assistant</div>
+          <div class="exp-card-org">University of Innsbruck · Institute of Microbiology</div>
+          <p class="exp-card-desc">Managed Black Soldier Fly rearing for microbial, behavioural, and cultivational research. Evaluated life-history traits and oviposition patterns to optimise breeding outcomes.</p>
+          <div class="exp-card-skills">
+            <span class="exp-skill">Insect Rearing</span>
+            <span class="exp-skill">Experimental Design</span>
+            <span class="exp-skill">Microbiology</span>
+          </div>
+        </div>
+        <div class="exp-card">
+          <span class="exp-card-num">05</span>
+          <div class="exp-card-year">Aug 2022</div>
+          <div class="exp-card-role">Wildlife Rehabilitation Intern</div>
+          <div class="exp-card-org">Alpenzoo Innsbruck · Tyrol, Austria</div>
+          <p class="exp-card-desc">Provided specialised care for injured local wildlife — birds, small mammals, and bats — preparing animals for release in a conservation-focused zoo setting.</p>
+          <div class="exp-card-skills">
+            <span class="exp-skill">Wildlife Care</span>
+            <span class="exp-skill">Species ID</span>
+            <span class="exp-skill">Conservation Ed.</span>
+          </div>
+        </div>
+        <div class="exp-card">
+          <span class="exp-card-num">06</span>
+          <div class="exp-card-year">Jul 2018</div>
+          <div class="exp-card-role">Research Intern</div>
+          <div class="exp-card-org">Medical University of Innsbruck · Gastroenterology</div>
+          <p class="exp-card-desc">Carried out PCR analyses and prepared biological samples (mice organs) for medical research — an early introduction to molecular laboratory methods.</p>
+          <div class="exp-card-skills">
+            <span class="exp-skill">PCR</span>
+            <span class="exp-skill">Sample Preparation</span>
+            <span class="exp-skill">Medical Research</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- RESEARCH -->
+  <section id="research">
+    <div class="fade-up">
+      <p class="section-label">Research & Publications</p>
+    </div>
+    <div class="research-grid">
+
+      <!-- Thesis — not a link, so plain div -->
+      <div class="thesis-card pub-card fade-up">
+        <div>
+          <div class="pub-year">Master's Thesis · Apr 2024</div>
+          <div class="pub-title">Unveiling Population Structure and Genetic Diversity of Smooth Newts (Lissotriton vulgaris) in North Tyrol</div>
+          <div class="pub-journal">University of Innsbruck · MSc Ecology & Biodiversity</div>
+        </div>
+        <div class="pub-desc">Designed and executed non-invasive field sampling across North Tyrolean wetlands. Optimised DNA extraction protocols and conducted microsatellite analysis to reveal population connectivity, allochthonous influences, and conservation priorities for a protected amphibian species in alpine Austria.</div>
+      </div>
+
+      <!-- Publication 1 — real link -->
+      <a class="pub-card fade-up"
+         href="https://link.springer.com/content/pdf/10.1007/s00248-025-02691-1_reference.pdf"
+         target="_blank" rel="noopener">
+        <div class="pub-badge">Published</div>
+        <div class="pub-year">Dec 2025</div>
+        <div class="pub-title">Stage-Specific Microbiota Transitions Throughout Black Soldier Fly Ontogeny</div>
+        <div class="pub-journal">Microbial Ecology</div>
+        <div class="pub-authors">Klammsteiner, T., Heussler, C. D., <strong>Stonig, K. T.</strong>, Insam, H., Schlick-Steiner, B. C., & Steiner, F. M. (2026)</div>
+        <div class="pub-readmore">Read paper →</div>
+      </a>
+
+      <!-- Publication 2 — real link -->
+      <a class="pub-card fade-up"
+         href="https://www.biorxiv.org/content/10.64898/2026.01.23.701301v1.abstract"
+         target="_blank" rel="noopener">
+        <div class="pub-badge" style="background: var(--moss);">Under Review</div>
+        <div class="pub-year">Oct 2025</div>
+        <div class="pub-title">Population structure and genetic diversity of smooth newts (Lissotriton vulgaris) in North Tyrol, Austria</div>
+        <div class="pub-journal">Amphibia-Reptilia · bioRxiv 2026.01.23.701301</div>
+        <div class="pub-authors"><strong>Stonig, K. T.</strong>, Haider, M., Glaser, F., Schlick-Steiner, B. C., & Steiner, F. M. (2025)</div>
+        <div class="pub-readmore">Read preprint →</div>
+      </a>
+
+    </div>
+  </section>
+
+  <!-- SKILLS -->
+  <section id="skills">
+    <div class="fade-up">
+      <p class="section-label">Skills & Languages</p>
+    </div>
+    <div class="skills-layout">
+      <div class="skills-intro fade-up">
+        "A naturalist's instinct, sharpened by molecular tools — and grounded by real field mud."
+      </div>
+      <div class="skills-groups fade-up">
+        <div>
+          <div class="skill-group-label">Technical</div>
+          <div class="skill-pills">
+            <span class="skill-pill highlight">R / ggplot2</span>
+            <span class="skill-pill highlight">Population Genetics</span>
+            <span class="skill-pill">QGIS</span>
+            <span class="skill-pill">GeneMarker</span>
+            <span class="skill-pill">LaTeX</span>
+            <span class="skill-pill">MS Office</span>
+          </div>
+        </div>
+        <div>
+          <div class="skill-group-label">Laboratory Methods</div>
+          <div class="skill-pills">
+            <span class="skill-pill highlight">DNA Extraction</span>
+            <span class="skill-pill highlight">PCR & Gel Electrophoresis</span>
+            <span class="skill-pill">Microsatellite Analysis</span>
+            <span class="skill-pill">Microbial Cultivation</span>
+            <span class="skill-pill">CFU Quantification</span>
+            <span class="skill-pill">Species Rearing</span>
+          </div>
+        </div>
+        <div>
+          <div class="skill-group-label">Field & Research</div>
+          <div class="skill-pills">
+            <span class="skill-pill highlight">Non-invasive Sampling</span>
+            <span class="skill-pill">Statistical Analysis</span>
+            <span class="skill-pill">Research Design</span>
+            <span class="skill-pill">Science Communication</span>
+            <span class="skill-pill">Conservation Planning</span>
+          </div>
+        </div>
+        <div>
+          <div class="skill-group-label">Species Experience</div>
+          <div class="skill-pills">
+            <span class="skill-pill">Smooth Newts</span>
+            <span class="skill-pill">Drosophila (incl. Wolbachia)</span>
+            <span class="skill-pill">Black Soldier Fly</span>
+            <span class="skill-pill">Daphnia</span>
+            <span class="skill-pill">Bats & Birds (rehab)</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="languages-row fade-up">
+      <div class="lang-block">
+        <div class="lang-name">German</div>
+        <div class="lang-level">Native</div>
+      </div>
+      <div class="lang-block">
+        <div class="lang-name">English</div>
+        <div class="lang-level">C1 · USA Residency</div>
+      </div>
+      <div class="lang-block">
+        <div class="lang-name">Italian</div>
+        <div class="lang-level">Intermediate</div>
+      </div>
+      <div class="lang-block">
+        <div class="lang-name">Danish</div>
+        <div class="lang-level">Learning</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- INTERESTS -->
+  <section id="interests">
+    <div class="interests-text fade-up">
+      <p class="section-label">Beyond the Lab</p>
+      <h2>Made by<br><em>hand</em>,<br>lived<br><em>outdoors</em></h2>
+      <p>Away from microscopes and data frames, I'm most alive when working with my hands — forging metal, throwing clay, building furniture. The same patience I bring to a DNA extraction applies equally to a dovetail joint.</p>
+    </div>
+    <div class="interest-items fade-up">
+      <div class="interest-item">
+        <div class="interest-icon">🪵</div>
+        <div class="interest-title">Craftsmanship</div>
+        <div class="interest-desc">Woodworking · Knitting<br>Pottery · DIY</div>
+      </div>
+      <div class="interest-item">
+        <div class="interest-icon">🔨</div>
+        <div class="interest-title">Metalwork</div>
+        <div class="interest-desc">Forging · Blacksmithing<br>Jewellery making</div>
+      </div>
+      <div class="interest-item">
+        <div class="interest-icon">🌿</div>
+        <div class="interest-title">Nature & Food</div>
+        <div class="interest-desc">Hiking · Biking · Skiing<br>Daily cooking · Gastronomy</div>
+      </div>
+      <div class="interest-item">
+        <div class="interest-icon">🌍</div>
+        <div class="interest-title">Culture & Travel</div>
+        <div class="interest-desc">Intercultural exchange<br>Environmental protection</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="fade-up">
+      <p class="section-label">Get in Touch</p>
+      <h2 class="contact-headline">Let's<br>work<br><em>together</em></h2>
+      <!-- CV download button — replace href with your actual CV file path once uploaded -->
+      <a class="cv-download" href="CV_Katharina_Stonig.pdf" download>
+        <span class="cv-download-icon">↓</span>
+        Download CV
+      </a>
+    </div>
+    <div class="contact-links fade-up">
+      <a class="contact-link" href="mailto:katharina.stonig@gmail.com">
+        <div class="contact-link-icon">✉</div>
+        <div>
+          <div class="contact-link-label">Email</div>
+          <div class="contact-link-value">katharina.stonig@gmail.com</div>
+        </div>
+      </a>
+      <a class="contact-link" href="tel:+13393681879">
+        <div class="contact-link-icon">☏</div>
+        <div>
+          <div class="contact-link-label">Phone</div>
+          <div class="contact-link-value">+1 (339) 368-1879</div>
+        </div>
+      </a>
+      <a class="contact-link" href="https://www.linkedin.com/in/katharina-stonig" target="_blank">
+        <div class="contact-link-icon">in</div>
+        <div>
+          <div class="contact-link-label">LinkedIn</div>
+          <div class="contact-link-value">linkedin.com/in/katharina-stonig</div>
+        </div>
+      </a>
+      <div class="contact-link" style="opacity:0.4; cursor: default;">
+        <div class="contact-link-icon">◉</div>
+        <div>
+          <div class="contact-link-label">Citizenship</div>
+          <div class="contact-link-value">Austrian · EU-wide work permit</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <p>Katharina Stonig · Molecular Ecologist · MSc Ecology & Biodiversity</p>
+    <p>© 2026 — All rights reserved</p>
+  </footer>
+
+  <script>
+    // ── Active nav on scroll ──
+    const sections = document.querySelectorAll('section[id]');
+    const navLinks = document.querySelectorAll('.nav-links a[data-section]');
+    const mainNav = document.getElementById('mainNav');
+
+    const sectionObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          navLinks.forEach(link => {
+            link.classList.toggle('active', link.dataset.section === entry.target.id);
+          });
+        }
+      });
+    }, { threshold: 0.35 });
+
+    sections.forEach(s => sectionObserver.observe(s));
+
+    // Nav border on scroll
+    window.addEventListener('scroll', () => {
+      mainNav.classList.toggle('scrolled', window.scrollY > 40);
+    });
+
+    // ── Horizontal scroll experience ──
+    const track = document.getElementById('expTrack');
+    const cardWidth = 380 + 32;
+    let currentIndex = 0;
+    const totalCards = track.children.length;
+    const visibleCards = () => Math.floor(track.parentElement.offsetWidth / cardWidth);
+
+    document.getElementById('expNext').addEventListener('click', () => {
+      const maxIndex = totalCards - visibleCards();
+      currentIndex = Math.min(currentIndex + 1, maxIndex);
+      track.style.transform = `translateX(-${currentIndex * cardWidth}px)`;
+    });
+    document.getElementById('expPrev').addEventListener('click', () => {
+      currentIndex = Math.max(currentIndex - 1, 0);
+      track.style.transform = `translateX(-${currentIndex * cardWidth}px)`;
+    });
+
+    // ── Scroll-in animations ──
+    const fadeObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          setTimeout(() => entry.target.classList.add('visible'), 100);
+        }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -60px 0px' });
+
+    document.querySelectorAll('.fade-up').forEach(el => fadeObserver.observe(el));
+  </script>
+
+</body>
+</html>
